@@ -1,5 +1,5 @@
 # ELSpring2018
-![alt text](https://www.newpaltz.edu/media/identity/logos/newpaltzlogo.jpg)
+![small](https://www.newpaltz.edu/media/identity/logos/newpaltzlogo.jpg)
 This is a template for Spring 2020 Embedded Linux class
 
 This repository documents my class work and projects done for CPS342
