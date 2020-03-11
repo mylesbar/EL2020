@@ -9,7 +9,7 @@ This repository documents my class work and projects done for CPS342
       
       Major: Computer Engineering & Computer Science     
        
-       ID:[N03329504](https://github.com/mylesbar)
+      ID:[N03329504](https://github.com/mylesbar)
      
      Year: Senior
 
