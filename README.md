@@ -8,7 +8,7 @@ This repository documents my class work and projects done for CPS342
         Name: Myles Barcelo
         Major: Computer Engineering & Computer Science
         ID:[N03329504](https://github.com/mylesbar)
-        Yeah: Senior
+        Year: Senior
 
 2. Class Start Date: January 30 2020
 
