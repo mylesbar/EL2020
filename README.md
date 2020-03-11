@@ -1,3 +1,17 @@
-# EL1998
+# ELSpring2018
+![alt text] https://www.newpaltz.edu/media/identity/logos/newpaltzlogo.jpg
+This is a template for Spring 2020 Embedded Linux class
 
-Hello, and welcome to Mr. Simons's repository for the spring 1998 embedded linux class.  This repository will be used as an example of ways to maintain a code base while working on a project. This is **NOT** the Embedded Linux class itself.  That is hosted on Google Classroom.  Please contact "simonsj [at] newpaltz [dot] edu" if you are in the class, but do not have the classroom code.
+This repository documents my class work and projects done for CPS342
+
+1. Personal Information:
+        Name: Myles Barcelo
+        Major: Computer Engineering & Computer Science
+        ID:[N03329504](https://github.com/mylesbar)
+        Yeah: Senior
+
+2. Class Start Date: January 30 2020
+
+3. Class End Date: May 8 2020
+
+
