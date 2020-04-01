@@ -4,7 +4,7 @@ import Adafruit_DHT
 import time
 import os
 #Assign GPIO pins
-redPin = 27
+redPin = 21
 tempPin = 17
 buttonPin = 26
 
@@ -13,16 +13,19 @@ tempSensor = Adafruit_DHT.DHT11
 
 #LED Variables--------------------------------------------------------
 #Duration of each Blink
-blinkDur = .1
+blinkDur = .5
 #Number of times to Blink the LED
-blinkTime = 7
+blinkTime = 5
 #---------------------------------------------------------------------
 
 #Initialize the GPIO
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(redPin,GPIO.OUT)
 GPIO.setup(buttonPin, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(tempPin, GPIO.IN)
 
+print('Program Start!')
+print('------------------------------')
 def oneBlink(pin):
 	GPIO.output(pin,True)
 	time.sleep(blinkDur)
@@ -41,12 +44,14 @@ def readF(tempPin):
 try:
 	while True:
  		input_state = GPIO.input(buttonPin)
-		if input_state == False:
+		if input_state == True:
 			for i in range (blinkTime):
 				oneBlink(redPin)
-			time.sleep(.2)
-			data = readF(tempPin)
-			print (data)
+				#time.sleep(.2)
+				data = readF(tempPin)
+				print ('temperature',data)
+			print('-----------------------------------------')
+			input_state = False
 
 except KeyboardInterrupt:
 	os.system('clear')

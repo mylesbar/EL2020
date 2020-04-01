@@ -14,6 +14,7 @@ ledPin = 27
 buttonPin = 26
 tempPin = 17
 tempSensor = Adafruit_DHT.DHT11
+
 #This function will make the light blink once
 def blinkOnce(pin):
         GPIO.output(pin,True)
@@ -22,26 +23,28 @@ def blinkOnce(pin):
         time.sleep(0.5)
 #temp reading
 def readF(tempPin):
-	humidity, temperature = Adafruit_DHT.read_retry(tempSensor,tempPin)
-	print(temperature)
-	temperature = temperature * 9/5.0 +32
-	if humidity is not None and temperature is not None:
-#		temperature = temperature * 9/5.0 +32	
-		tempFahr = '[0:0.1f]*F'.format(temperature)
-	else:
-		print("error reading sensor")
-	return tempFahr
+        humidity, temperature = Adafruit_DHT.read_retry(tempSensor,tempPin)
+        temperature = temperature * 9/5.0 +32
+        print('temperature:',temperature)
+        if humidity is not None and temperature is not None:
+        #       temperature = temperature * 9/5.0 +32
+                tempFahr = '{0:0.1f}*F'.format(temperature)
+        else:
+                print("error reading sensor")
+        return temperature
+
 #touchy touchy
 try:
         while True:
                 button_input_state = GPIO.input(26)
-                if button_input_state == False:
+                if button_input_state == True:
                         for i in range(5):
                                 blinkOnce(ledPin)
-                                print("blink")
-                        time.sleep(0.2)
-			data = readF(tempPin)
-			print(data)
+                                #print("blink")
+                       		#time.sleep(0.2)
+				data = readF(tempPin)
+				#print('done')
+			button_input_state = False
 #keyboard exception
 except KeyboardInterrupt:
 	os.system('clear')
