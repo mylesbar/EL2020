@@ -1,0 +1,13 @@
+#!/bin/bash
+clear
+
+echo "Script start: "
+
+dayString=$(date +%
+echo ${dayString}
+
+
+
+echo "Code complete"
+
+
