@@ -1,4 +1,4 @@
-# ELSpring2018
+# ELSpring2020
 ![small](https://www.newpaltz.edu/media/identity/logos/newpaltzlogo.jpg)
 This is a template for Spring 2020 Embedded Linux class
 
