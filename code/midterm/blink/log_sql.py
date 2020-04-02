@@ -21,7 +21,6 @@ blinkDur = 1
 blinkTime = 5
 #---------------------------------------------------------------------
 
-entryNum =0
 
 #Initialize the GPIO
 GPIO.setmode(GPIO.BCM)
@@ -39,7 +38,7 @@ def oneBlink(pin):
 
 def readF(tempPin):
 	humidity, temperature = Adafruit_DHT.read_retry(tempSensor, tempPin)
- 	temperature = temperature * 9/5.0 +32
+	temperature = temperature * 9/5.0 +32
 	if humidity is not None and temperature is not None:
 		tempFahr = '{0:0.1f}*F'.format(temperature)
 	else:
@@ -56,41 +55,47 @@ def readH(tempPin):
         return humid
 
 try:
-        with open("log/log60s.csv","a") as log:
-		#time.sleep(60.0 - ((time.time()-starttime) % 60.0) )
-		con = sql.connect('testLog.db')
-		cur = con.cursor()
-		cur.execute( ''' CREATE TABLE IF NOT EXISTS sensor_data (timestamp TEXT, temp TEXT, humid TEXT) ''')
 
+	con = sql.connect('testLog.db')
+	cur = con.cursor()
+	cur.execute( '''
+	 CREATE TABLE IF NOT EXISTS "sensor_data" (
+	"timestamp" TEXT,
+	"temp" TEXT,
+	"humid" TEXTL
+		)
+	 ''')
+	with open("log/log60s.csv","a") as log:
 		while True:
-			starttime = time.time()
+
+#run logging every 60s-------------------------------------------------------------
+			starttime = time.time() 
+			time.sleep(60.0 - ((time.time()-starttime) % 60.0) )
+#blink when 60s is over and record temp and humidity--------------------------------
 			oneBlink(redPin)
 			dataF = readF(tempPin)
 			dataH = readH(tempPin)
 			print (dataF,dataH)
-
-			date_insert = str( "{0}\n".format(time.strftime("%Y-%m-%d %H:%M:%S")))
+#stringify for db-------------------------------------------------------------------
+			date_insert = "{0}\n".format(time.strftime("%Y-%m-%d %H:%M:%S"))
 			temp_insert = str(dataF)
 			humid_insert= str(dataH)
-			log.write("{0},{1}\n".format(time.strftime("%Y-%m-%d %H:%M:%S"),str(dataF),str(dataH)))
-			print('wrote to csv')
-
-			cur.execute("import /log/log60s.csv log60s")
-			cur.execute("select * from nyt1 LIMIT entryNum")
-			#cur.execute("INSERT INTO sensor_data VALUES(date_insert,dataF,dataH) ")
-			cur.commit()
-#		table = con.execute("select * from testLog")
+#write to csv-----------------------------------------------------------------------
+             #           log.write("{0},{1},{2}\n".format(time.strftime("%Y-%m-%d %H:%M:%S"),str(dataF),str(dataH)))
+             #           print("wrote to CSV")
+#write to db------------------------------------------------------------------------
+			cur.execute('''INSERT INTO sensor_data(timestamp,temp,humid) VALUES (?,?,?)''',(date_insert,temp_insert,humid_insert))
+			con.commit()
 
 			print("wrote to database")
 			print('-----------------------------------------')
-			input_state = False
-#
+
 except sql.Error, e:
 	print"Error %s:" %e.args[0]
 	sys.exit(1)
 
 except KeyboardInterrupt:
-#	os.system('clear')
+	os.system('clear')
 	con.close()
 	print('Thanks for Blinking and Thinking!')
 	GPIO.cleanup()

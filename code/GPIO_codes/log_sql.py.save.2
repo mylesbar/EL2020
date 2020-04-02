@@ -21,7 +21,6 @@ blinkDur = 1
 blinkTime = 5
 #---------------------------------------------------------------------
 
-entryNum =0
 
 #Initialize the GPIO
 GPIO.setmode(GPIO.BCM)
@@ -60,7 +59,7 @@ try:
 		#time.sleep(60.0 - ((time.time()-starttime) % 60.0) )
 		con = sql.connect('testLog.db')
 		cur = con.cursor()
-		cur.execute( ''' CREATE TABLE IF NOT EXISTS sensor_data (timestamp TEXT, temp TEXT, humid TEXT) ''')
+#		cur.execute( ''' CREATE TABLE IF NOT EXISTS sensor_data (timestamp TEXT, temp TEXT, humid TEXT) ''')
 
 		while True:
 			starttime = time.time()
@@ -72,12 +71,11 @@ try:
 			date_insert = str( "{0}\n".format(time.strftime("%Y-%m-%d %H:%M:%S")))
 			temp_insert = str(dataF)
 			humid_insert= str(dataH)
-			log.write("{0},{1}\n".format(time.strftime("%Y-%m-%d %H:%M:%S"),str(dataF),str(dataH)))
-			print('wrote to csv')
 
-			cur.execute("import /log/log60s.csv log60s")
-			cur.execute("select * from nyt1 LIMIT entryNum")
-			#cur.execute("INSERT INTO sensor_data VALUES(date_insert,dataF,dataH) ")
+						
+print('wrote to csv')
+
+			cur.execute("INSERT INTO testLog.db VALUES (date_insert,dataF,dataH) ")
 			cur.commit()
 #		table = con.execute("select * from testLog")
 
