@@ -16,6 +16,7 @@ tempSensor = Adafruit_DHT.DHT11
 blinkDur = .5
 #Number of times to Blink the LED
 blinkTime = 5
+#Time of recording
 #---------------------------------------------------------------------
 
 #Initialize the GPIO
@@ -26,6 +27,7 @@ GPIO.setup(tempPin, GPIO.IN)
 
 print('Program Start!')
 print('------------------------------')
+
 def oneBlink(pin):
 	GPIO.output(pin,True)
 	time.sleep(blinkDur)
@@ -42,18 +44,20 @@ def readF(tempPin):
 	return tempFahr
 
 try:
-	while True:
- 		input_state = GPIO.input(buttonPin)
-		if input_state == True:
-			for i in range (blinkTime):
-				oneBlink(redPin)
-				#time.sleep(.2)
-				data = readF(tempPin)
-				print ('temperature',data)
-			print('-----------------------------------------')
-			input_state = False
+	with open("log/tempLog.csv","a") as log:
+		while True:
+ 			input_state = GPIO.input(buttonPin)
+			if input_state == True:
+				for i in range (blinkTime):
+					oneBlink(redPin)
+					#time.sleep(.2)
+					data = readF(tempPin)
+					print ('temperature',data)
+					log.write("{0},{1}\n".format(time.strftime("%Y-%m-%d %H:%M:%S"),str(data)))
+				print('-----------------------------------------')
+				input_state = False
 
 except KeyboardInterrupt:
-	os.system('clear')
+#	os.system('clear')
 	print('Thanks for Blinking and Thinking!')
 	GPIO.cleanup()
