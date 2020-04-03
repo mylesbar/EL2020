@@ -1,2 +1,1 @@
-This is where I put my programs and code for the ELSpring 2020 Class
-
+This is the section where the final code for the midterm project is stored

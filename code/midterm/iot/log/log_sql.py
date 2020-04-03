@@ -3,6 +3,9 @@ import RPi.GPIO as GPIO
 import Adafruit_DHT
 import time
 import os
+import sqlite3 as sql
+import sys
+
 #Assign GPIO pins
 redPin = 21
 tempPin = 17
@@ -17,6 +20,7 @@ blinkDur = 1
 #Number of times to Blink the LED
 blinkTime = 5
 #---------------------------------------------------------------------
+
 
 #Initialize the GPIO
 GPIO.setmode(GPIO.BCM)
@@ -51,24 +55,47 @@ def readH(tempPin):
         return humid
 
 try:
-	with open("log/log60s.csv","a") as log:
+
+	con = sql.connect('../log/tempLog.db')
+	cur = con.cursor()
+	cur.execute( '''
+	 CREATE TABLE IF NOT EXISTS "tempLog" ( 
+	"timestamp" TEXT,
+	"temp" TEXT,
+	"humid" TEXTL
+		)
+	 ''') #renamed" sensor data" from tempLog SQL branch
+	with open("log60s.csv","a") as log:
 		while True:
-# 			input_state = GPIO.input(buttonPin)
-#			if input_state == True:
-#			for i in range (blinkTime):
-			starttime = time.time()
+
+#run logging every 60s-------------------------------------------------------------
+			starttime = time.time() 
 			time.sleep(60.0 - ((time.time()-starttime) % 60.0) )
+#blink when 60s is over and record temp and humidity--------------------------------
 			oneBlink(redPin)
-			#time.sleep(.2)
 			dataF = readF(tempPin)
 			dataH = readH(tempPin)
 			print (dataF,dataH)
-			log.write("{0},{1},{2}\n".format(time.strftime("%Y-%m-%d %H:%M:%S"),str(dataF),str(dataH)))
-			print("wrote to file")
+#stringify for db-------------------------------------------------------------------
+			date_insert = "{0}\n".format(time.strftime("%Y-%m-%d %H:%M:%S"))
+			temp_insert = str(dataF)
+			humid_insert= str(dataH)
+#write to csv-----------------------------------------------------------------------
+             #           log.write("{0},{1},{2}\n".format(time.strftime("%Y-%m-%d %H:%M:%S"),str(dataF),str(dataH)))
+             #           print("wrote to CSV")
+#write to db------------------------------------------------------------------------
+			cur.execute('''INSERT INTO tempLog(timestamp,temp,humid) VALUES (?,?,?)''',(date_insert,temp_insert,humid_insert))
+			con.commit()
+
+			print("wrote to database")
 			print('-----------------------------------------')
-			input_state = False
-#
+
+except sql.Error, e:
+	print"Error %s:" %e.args[0]
+	sys.exit(1)
+
 except KeyboardInterrupt:
-#	os.system('clear')
+	os.system('clear')
+	con.close()
 	print('Thanks for Blinking and Thinking!')
 	GPIO.cleanup()
