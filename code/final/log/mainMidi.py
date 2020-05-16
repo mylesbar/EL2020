@@ -15,6 +15,7 @@ import pandas #error importing into python 2.7
 import random
 import datetime
 import math
+
 #Initialize hardware
 tempSensor = Adafruit_DHT.DHT11
 tempPin = 12
@@ -71,8 +72,8 @@ try:
 		CREATE TABLE IF NOT EXISTS "dataLog" (
 		"Temperature" TEXT,
 		"Humidity" TEXT,
-		"Barrometric_Pressure" TEXT,
-		"Time_Recorded" TEXTL
+		"Pressure" TEXT,
+		"Timestamp" TEXTL
 			)
 		''')
 	print('Connected')
@@ -106,7 +107,7 @@ try:
 
 
 			print("writing to db")
-			cur.execute(''' INSERT INTO dataLog(Temperature,Humidity,Barrometric_Pressure,Time_Recorded) VALUES (?,?,?,?)''',
+			cur.execute(''' INSERT INTO dataLog(Temperature,Humidity,Pressure,Timestamp) VALUES (?,?,?,?)''',
 			(str(tempOut) , str(humidOut), str(bmpPressure) ,"{0}\n".format(clk.strftime("%Y-%m-%d %H:%M:%S") ) )   )
 			con.commit()
 			print("successful write to db")
